@@ -23,8 +23,10 @@ public class EmployeeController {
     		@RequestParam(name="name", required=false) String name,
     		@RequestParam(name="isFuzzy", defaultValue="false") boolean isFuzzy
     		) {
+    	log.info("called /employees, querying...");
     	List<Employee> employees = employeeService.getEmployees(ID, name, isFuzzy);
-    	employees.forEach(customer -> log.info(customer.toString()));
+    	//employees.forEach(customer -> log.info(customer.toString()));
+    	log.info("query finished, returned " + employees.size() + " records.");
         return employees;
     }
 }

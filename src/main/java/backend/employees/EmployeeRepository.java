@@ -25,7 +25,11 @@ public class EmployeeRepository {
 		
 		List<Employee> employees = jdbc.query(
                 sqlBuilder.toString(), new Object[] {},
-                (rs, rowNum) -> new Employee(rs.getString("PEOPLE_IDENTIFIER"), rs.getString("PEOPLE_NAME"))
+                (rs, rowNum) -> new Employee(
+                		rs.getString("PEOPLE_IDENTIFIER"), 
+                		rs.getString("PEOPLE_NAME"),
+                		rs.getString("MOBILE"),
+                		rs.getString("ID_NO"))
           	);
 		
 		return employees;
