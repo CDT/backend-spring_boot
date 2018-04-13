@@ -1,6 +1,15 @@
 package backend.employees;
 
+import java.util.HashMap;
+
 public class Employee {
+	
+	// model列名和数据库列名对照
+	public static HashMap<String, String> columnMapper = new HashMap<String, String>();
+	static {
+		columnMapper.put("job_NO", "people_identifier");
+		columnMapper.put("name", "people_name");
+	}	
 	
 	public Employee() {};
 	

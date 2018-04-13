@@ -29,12 +29,14 @@ public class EmployeeController {
     		@RequestParam(name="is_fuzzy", defaultValue="true") boolean isFuzzy,
     		@RequestParam(name="page", defaultValue="1") int page,
     		@RequestParam(name="per_page", defaultValue="15") int perPage,
+    		@RequestParam(name="filter", defaultValue="") String filter,
+    		@RequestParam(name="sort", defaultValue="") String sort,
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());
     	log.info("called /employees, querying...");
     	
-    	QueryResult queryResult = employeeService.getEmployees(ID, name, isFuzzy, page, perPage);
+    	QueryResult queryResult = employeeService.getEmployees(ID, name, isFuzzy, page, perPage, filter, sort);
     	List<Employee> employees = (List<Employee>) queryResult.getData();
     	int total = queryResult.getTotal();
     	

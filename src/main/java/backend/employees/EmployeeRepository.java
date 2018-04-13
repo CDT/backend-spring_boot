@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import backend.common.QueryResult;
+import backend.common.Utilities;
 
 @Repository
 public class EmployeeRepository {
@@ -31,19 +32,28 @@ public class EmployeeRepository {
 		        WHERE  customerid LIKE 'A%') res
 		WHERE  rn BETWEEN (pagenumber - 1) * pagesize + 1 AND pagenumber * pagesize;
 	 */
-	public QueryResult getEmployees(String ID, String name, boolean isFuzzy, int page, int per_page) {
+	public QueryResult getEmployees(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		String sqlTemplate = 
-				"SELECT res.*\r\n" + 
+				"SELECT res.* \r\n" + 
 				// "       CEIL(total_num_rows/$pagesize) total_num_pages\r\n" + 
 				"FROM   (SELECT o.*,\r\n" + 
-				"               row_number() OVER (ORDER BY user_name asc) rn,\r\n" + 
+				"               row_number() OVER ($orderby) rn,\r\n" + 
 				"               COUNT(*) OVER () total_num_rows\r\n" + 
-				"        FROM   UUM.UUM_USER o\r\n" + 
-				"        WHERE  1=1) res\r\n" + 
+				"        FROM UUM.UUM_USER o\r\n" + 
+				"        WHERE (user_name like '%$filter%' or people_name like '%$filter%' or mobile like '%$filter%')) res\r\n" + 
 				"WHERE  rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
 		
+		if(sort != null && sort.length() > 0) {
+			sqlTemplate = sqlTemplate.replaceAll("\\$orderby", 
+					"ORDER BY " + Utilities.convertModelColumnToDatabaseColumn(sort.replaceAll("\\|", " "), Employee.columnMapper));
+		} else {
+			sqlTemplate = sqlTemplate.replaceAll("\\$orderby", "ORDER BY USER_NAME ASC");
+		}
+		
 		String sql = sqlTemplate.replaceAll("\\$pagenumber", Integer.toString(page))
-				   				.replaceAll("\\$pagesize", Integer.toString(per_page));
+				   				.replaceAll("\\$pagesize", Integer.toString(per_page))
+								.replaceAll("\\$filter", filter);
+		
 		log.info("Ready to execute: \n" + sql);		
 		
 		AtomicInteger total = new AtomicInteger(-1);
@@ -51,9 +61,9 @@ public class EmployeeRepository {
                 sql, new Object[] {},
                 (rs, rowNum) -> {
                 	Employee employee = new Employee(                
-                		rs.getString("PEOPLE_IDENTIFIER"), 
-                		rs.getString("PEOPLE_NAME"),
-                		rs.getString("MOBILE"),
+                		rs.getString("people_identifier"), 
+                		rs.getString("people_name"),
+                		rs.getString("mobile"),
                 		rs.getString("ID_NO"));
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); }
                 	return employee;
