@@ -64,7 +64,8 @@ public class EmployeeRepository {
                 		rs.getString("people_identifier"), 
                 		rs.getString("people_name"),
                 		rs.getString("mobile"),
-                		rs.getString("ID_NO"));
+                		rs.getString("ID_NO"),
+                		rs.getString("user_password"));
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); }
                 	return employee;
                 }

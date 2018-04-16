@@ -13,11 +13,12 @@ public class Employee {
 	
 	public Employee() {};
 	
-	public Employee(String JOB_NO, String name, String mobile, String ID_NO) {
+	public Employee(String JOB_NO, String name, String mobile, String ID_NO, String password) {
 		this.JOB_NO = JOB_NO;
 		this.name = name;
 		this.mobile = mobile;
 		this.ID_NO = ID_NO;
+		this.password = password;
 	};
 	
 	private String JOB_NO;
@@ -28,7 +29,19 @@ public class Employee {
 	
 	private String ID_NO;
 	
-	
+	private String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setJOB_NO(String jOB_NO) {
+		JOB_NO = jOB_NO;
+	}
 
 	public String getJOB_NO() {
 		return JOB_NO;
