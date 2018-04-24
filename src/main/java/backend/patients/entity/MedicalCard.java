@@ -1,12 +1,14 @@
-package backend.patients;
+package backend.patients.entity;
 
 import java.util.Date;
 
 public class MedicalCard {
+	
 	private String cardID;
 	private Date dateOfIssue;
 	private Boolean isCancelled;
 	private String track;
+	
 	public String getCardID() {
 		return cardID;
 	}

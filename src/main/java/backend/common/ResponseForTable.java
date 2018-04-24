@@ -2,7 +2,9 @@ package backend.common;
 
 import java.util.List;
 
-public class Response {
+import backend.employees.Employee;
+
+public class ResponseForTable {
 	// 总记录数
 	private int total;
 	// 每页记录数
@@ -21,6 +23,26 @@ public class Response {
 	private int to;
 	// 所有记录数据
 	private List<? extends Object> data;
+	
+	public static ResponseForTable buildResponse(List<? extends Object> data, String uri, int currentPage, int perPage, int total) {
+    	ResponseForTable resp = new ResponseForTable();
+
+    	int lastPage = total / perPage + (total % perPage == 0 ? 1 : 0);
+    	
+    	resp.setData(data);
+    	resp.setPer_page(perPage);
+    	resp.setCurrent_page(currentPage);
+    	resp.setLast_page(lastPage);
+    	resp.setTotal(total);
+    	
+    	resp.setFrom(perPage * (currentPage - 1) + 1);
+    	resp.setTo(perPage * currentPage);
+    	
+    	resp.setPrev_page_url(currentPage == 1 ? null : uri + "?page=" + (currentPage - 1) );
+    	resp.setNext_page_url(currentPage == lastPage ? null : uri + "?page=" + (currentPage + 1));
+    	
+    	return resp;
+    }
 	
 	public int getTotal() {
 		return total;

@@ -1,4 +1,4 @@
-package backend.employees;
+package backend.patients;
 
 import java.util.List;
 
@@ -13,17 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.common.QueryResult;
 import backend.common.ResponseForTable;
+import backend.patients.entity.Patient;
 
 @RestController
-public class EmployeeController {
+public class PatientController {
 
-	private static final Logger log = LoggerFactory.getLogger(EmployeeController.class);
+	private static final Logger log = LoggerFactory.getLogger(PatientController.class);
 	
 	@Autowired
-	EmployeeService employeeService;
+	PatientService patientService;
 	
-    @RequestMapping("/employees")
-    public ResponseForTable employees(
+    @RequestMapping("/patients")
+    public ResponseForTable patients(
     		@RequestParam(name="id", required=false) String ID,
     		@RequestParam(name="name", required=false) String name,
     		@RequestParam(name="is_fuzzy", defaultValue="true") boolean isFuzzy,
@@ -34,16 +35,16 @@ public class EmployeeController {
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());
-    	log.info("called /employees, querying...");
+    	log.info("called /patients, querying...");
     	
-    	QueryResult queryResult = employeeService.getEmployees(ID, name, isFuzzy, page, perPage, filter, sort);
-    	List<Employee> employees = (List<Employee>) queryResult.getData();
+    	QueryResult queryResult = patientService.getPatients(ID, name, isFuzzy, page, perPage, filter, sort);
+    	List<Patient> patients = (List<Patient>) queryResult.getData();
     	int total = queryResult.getTotal();
     	
     	//employees.forEach(customer -> log.info(customer.toString()));
-    	log.info("query finished, returned " + employees.size() + " of total " + total + "records.");
+    	log.info("query finished, returned " + patients.size() + " of total " + total + "records.");
     	
-        return ResponseForTable.buildResponse(employees, request.getRequestURI(), page, perPage, total);
+        return ResponseForTable.buildResponse(patients, request.getRequestURI(), page, perPage, total);
     }
     
 }
