@@ -1,96 +1,104 @@
 package backend.patients.entity;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 public class Patient {
-	// 身份证号码，不是患者ID(一个患者可能办多张卡，从而对应多个患者ID)
-	// 唯一标志一名患者
-	// 部分情况下患者身份证为空
-	private String ID;
+
+	// model列名和数据库列名对照
+	public static HashMap<String, String> columnMapper =  new HashMap<String, String>();
+	static {
+		columnMapper.put("patientId", "patient_Id");
+		columnMapper.put("gender", "sex_code");
+		columnMapper.put("dateOfBirth", "date_of_birth");
+		columnMapper.put("phone1", "phone_number1");
+		columnMapper.put("phone2", "phone_number2");
+		columnMapper.put("dateOfIssue", "create_time");
+		columnMapper.put("isCancelled", "is_cancel");
+	}
 	
-	// 由于办卡时可能信息登记错误，下列信息可能存在不一致的情况，因此均用List表示
-	// 正常情况下，下列List只有一个成员，除非信息登记错误
-	private List<String> name;
-	private List<Date> dateOfBirth;
-	private List<String> gender;
-	private List<String> mobile;
-	
-	// 下面的字段属于关联信息，可以为NULL，需要的时候才查出来
-	private MedicalCard medicalCards;
-	private List<OutpatientVisit> outpatientVisits;
-	private List<InpatientVisit> inpatientVisit;
-	
-	public Patient(String ID, List<String> name, List<Date> dateOfBirth, List<String> gender, List<String> mobile) {
-		this.ID = ID;
+	public Patient(String patientId, String name, String gender, Date dateOfBirth, String phone1, String phone2, Date dateOfIssue, Boolean isCancelled, String track) {
+		this.patientId = patientId;
 		this.name = name;
-		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
-		this.mobile = mobile;
-	}
-
-	public String getID() {
-		return ID;
-	}
-
-	public void setID(String iD) {
-		ID = iD;
-	}
-
-	public List<String> getName() {
-		return name;
-	}
-
-	public void setName(List<String> name) {
-		this.name = name;
-	}
-
-	public List<Date> getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(List<Date> dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+		this.phone1 = phone1;
+		this.phone2 = phone2;
+		this.dateOfIssue = dateOfIssue;
+		this.isCancelled = isCancelled;
+		this.track = track;
 	}
-
-	public List<String> getGender() {
+	
+	// 实际上Patient就是患者的就诊卡，一个患者多张就诊卡的情况较多
+	private String patientId;
+	private String name;
+	private String gender;
+	private Date dateOfBirth;
+	private String phone1;
+	private String phone2;
+	private Date dateOfIssue;
+	private Boolean isCancelled;
+	private String track;
+	
+	public String getGender() {
 		return gender;
 	}
-
-	public void setGender(List<String> gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-	public List<String> getMobile() {
-		return mobile;
+	public static HashMap<String, String> getColumnMapper() {
+		return columnMapper;
 	}
-
-	public void setMobile(List<String> mobile) {
-		this.mobile = mobile;
+	public static void setColumnMapper(HashMap<String, String> columnMapper) {
+		Patient.columnMapper = columnMapper;
 	}
-
-	public MedicalCard getMedicalCards() {
-		return medicalCards;
+	public String getPatientId() {
+		return patientId;
 	}
-
-	public void setMedicalCards(MedicalCard medicalCards) {
-		this.medicalCards = medicalCards;
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
-
-	public List<OutpatientVisit> getOutpatientVisits() {
-		return outpatientVisits;
+	public String getName() {
+		return name;
 	}
-
-	public void setOutpatientVisits(List<OutpatientVisit> outpatientVisits) {
-		this.outpatientVisits = outpatientVisits;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public List<InpatientVisit> getInpatientVisit() {
-		return inpatientVisit;
+	public Date getDateOfBirth() {
+		return dateOfBirth;
 	}
-
-	public void setInpatientVisit(List<InpatientVisit> inpatientVisit) {
-		this.inpatientVisit = inpatientVisit;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+	public String getPhone1() {
+		return phone1;
+	}
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
+	}
+	public String getPhone2() {
+		return phone2;
+	}
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
+	}
+	public Date getDateOfIssue() {
+		return dateOfIssue;
+	}
+	public void setDateOfIssue(Date dateOfIssue) {
+		this.dateOfIssue = dateOfIssue;
+	}
+	public Boolean getIsCancelled() {
+		return isCancelled;
+	}
+	public void setIsCancelled(Boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
+	public String getTrack() {
+		return track;
+	}
+	public void setTrack(String track) {
+		this.track = track;
 	}
 	
 }

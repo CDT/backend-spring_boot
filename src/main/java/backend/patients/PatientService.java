@@ -12,9 +12,9 @@ import backend.common.QueryResult;
 public class PatientService {
 
 	@Autowired
-	PatientRepository employeeRepository;
+	PatientRepository patientRepository;
 	
-	public QueryResult getEmployees(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
-		return employeeRepository.getEmployees(ID, name, isFuzzy, page, per_page, filter, sort);
+	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
+		return patientRepository.getPatients(ID, name, isFuzzy, page, per_page, filter, sort);
 	}
 }
