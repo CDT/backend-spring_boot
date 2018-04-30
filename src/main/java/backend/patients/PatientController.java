@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.common.QueryResult;
 import backend.common.ResponseForTable;
-import backend.patients.entity.Patient;
+import backend.patients.entity.PatientCard;
 
 @RestController
 public class PatientController {
@@ -29,7 +29,7 @@ public class PatientController {
     		@RequestParam(name="name", required=false) String name,
     		@RequestParam(name="is_fuzzy", defaultValue="true") boolean isFuzzy,
     		@RequestParam(name="page", defaultValue="1") int page,
-    		@RequestParam(name="per_page", defaultValue="15") int perPage,
+    		@RequestParam(name="per_page", defaultValue="20") int perPage,
     		@RequestParam(name="filter", defaultValue="") String filter,
     		@RequestParam(name="sort", defaultValue="") String sort,
     		HttpServletRequest request
@@ -38,7 +38,7 @@ public class PatientController {
     	log.info("called /patients, querying...");
     	
     	QueryResult queryResult = patientService.getPatients(ID, name, isFuzzy, page, perPage, filter, sort);
-    	List<Patient> patients = (List<Patient>) queryResult.getData();
+    	List<PatientCard> patients = (List<PatientCard>) queryResult.getData();
     	int total = queryResult.getTotal();
     	
     	//employees.forEach(customer -> log.info(customer.toString()));

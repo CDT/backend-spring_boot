@@ -3,7 +3,7 @@ package backend.patients.entity;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Patient {
+public class PatientCard {
 
 	// model列名和数据库列名对照
 	public static HashMap<String, String> columnMapper =  new HashMap<String, String>();
@@ -17,7 +17,7 @@ public class Patient {
 		columnMapper.put("isCancelled", "is_cancel");
 	}
 	
-	public Patient(String patientId, String name, String gender, Date dateOfBirth, String phone1, String phone2, Date dateOfIssue, Boolean isCancelled, String track) {
+	public PatientCard(String patientId, String name, String gender, Date dateOfBirth, String phone1, String phone2, Date dateOfIssue) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
@@ -25,11 +25,8 @@ public class Patient {
 		this.phone1 = phone1;
 		this.phone2 = phone2;
 		this.dateOfIssue = dateOfIssue;
-		this.isCancelled = isCancelled;
-		this.track = track;
 	}
 	
-	// 实际上Patient就是患者的就诊卡，一个患者多张就诊卡的情况较多
 	private String patientId;
 	private String name;
 	private String gender;
@@ -37,9 +34,7 @@ public class Patient {
 	private String phone1;
 	private String phone2;
 	private Date dateOfIssue;
-	private Boolean isCancelled;
-	private String track;
-	
+
 	public String getGender() {
 		return gender;
 	}
@@ -50,7 +45,7 @@ public class Patient {
 		return columnMapper;
 	}
 	public static void setColumnMapper(HashMap<String, String> columnMapper) {
-		Patient.columnMapper = columnMapper;
+		PatientCard.columnMapper = columnMapper;
 	}
 	public String getPatientId() {
 		return patientId;
@@ -88,17 +83,4 @@ public class Patient {
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
 	}
-	public Boolean getIsCancelled() {
-		return isCancelled;
-	}
-	public void setIsCancelled(Boolean isCancelled) {
-		this.isCancelled = isCancelled;
-	}
-	public String getTrack() {
-		return track;
-	}
-	public void setTrack(String track) {
-		this.track = track;
-	}
-	
 }
