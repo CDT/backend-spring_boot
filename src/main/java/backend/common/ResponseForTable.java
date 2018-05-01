@@ -27,7 +27,7 @@ public class ResponseForTable {
 	public static ResponseForTable buildResponse(List<? extends Object> data, String uri, int currentPage, int perPage, int total) {
     	ResponseForTable resp = new ResponseForTable();
 
-    	int lastPage = total / perPage + (total % perPage == 0 ? 1 : 0);
+    	int lastPage = total / perPage + (total % perPage == 0 ? 0 : 1);
     	
     	resp.setData(data);
     	resp.setPer_page(perPage);
@@ -36,7 +36,7 @@ public class ResponseForTable {
     	resp.setTotal(total);
     	
     	resp.setFrom(perPage * (currentPage - 1) + 1);
-    	resp.setTo(perPage * currentPage);
+    	resp.setTo(perPage * currentPage >= total ? total : perPage * currentPage);
     	
     	resp.setPrev_page_url(currentPage == 1 ? null : uri + "?page=" + (currentPage - 1) );
     	resp.setNext_page_url(currentPage == lastPage ? null : uri + "?page=" + (currentPage + 1));

@@ -25,7 +25,7 @@ public class PatientRepository {
 	 */
 	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		String sqlTemplate = 
-				"select t.*\r\n" + 
+				"select *\r\n" + 
 				"  from (select rownum rn,\r\n" + 
 				"               patient_id,\r\n" + 
 				"               name,\r\n" + 
@@ -33,14 +33,22 @@ public class PatientRepository {
 				"               date_of_birth,\r\n" + 
 				"               phone_number1,\r\n" + 
 				"               phone_number2,\r\n" + 
-				"               create_time,\r\n" + 
-				"               count(*) over () as total_num_rows\r\n" +
+				"               create_time\r\n" + 
 				"          from pca.pca_patient_info\r\n" + 
-				"         where (name like '%$filter%' or id_number like '%$filter%' or\r\n" + 
-				"               patient_id like '%$filter%' or\r\n" + 
-				"               phone_number1 like '%$filter%' or phone_number2 like '%$filter%')) t\r\n" + 
+				"         where $where),\r\n" +
+				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
+				"         where $where)\r\n" +
 				" where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
-				
+		
+		if(filter != null && filter.length() > 0) {
+			sqlTemplate = sqlTemplate.replaceAll("\\$where", 
+					"(name like '%\\$filter%' or id_number like '%\\$filter%' or \r\n" + 
+					"patient_id like '%\\$filter%' or\r\n" + 
+					"phone_number1 like '%\\$filter%' or phone_number2 like '%\\$filter%')");
+		} else {
+			sqlTemplate = sqlTemplate.replaceAll("\\$where", "1=1");
+		}
+		
 		String sql = sqlTemplate.replaceAll("\\$pagenumber", Integer.toString(page))
 				   				.replaceAll("\\$pagesize", Integer.toString(per_page))
 								.replaceAll("\\$filter", filter);
