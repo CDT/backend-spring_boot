@@ -10,29 +10,30 @@ public class PatientCard {
 	static {
 		columnMapper.put("patientId", "patient_Id");
 		columnMapper.put("gender", "sex_code");
+		columnMapper.put("idNumber", "id_number");
 		columnMapper.put("dateOfBirth", "date_of_birth");
-		columnMapper.put("phone1", "phone_number1");
-		columnMapper.put("phone2", "phone_number2");
+		columnMapper.put("phone1", "phone_number");
+		columnMapper.put("phone2", "phone_number");
 		columnMapper.put("dateOfIssue", "create_time");
 		columnMapper.put("isCancelled", "is_cancel");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, Date dateOfBirth, String phone1, String phone2, Date dateOfIssue) {
+	public PatientCard(String patientId, String name, String gender, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
+		this.idNumber = idNumber;
 		this.dateOfBirth = dateOfBirth;
-		this.phone1 = phone1;
-		this.phone2 = phone2;
+		this.phone = phone;
 		this.dateOfIssue = dateOfIssue;
 	}
 	
 	private String patientId;
 	private String name;
 	private String gender;
+	private String idNumber;
 	private Date dateOfBirth;
-	private String phone1;
-	private String phone2;
+	private String phone;
 	private Date dateOfIssue;
 
 	public String getGender() {
@@ -40,6 +41,12 @@ public class PatientCard {
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+	public String getIdNumber() {
+		return idNumber;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 	public static HashMap<String, String> getColumnMapper() {
 		return columnMapper;
@@ -65,17 +72,11 @@ public class PatientCard {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	public String getPhone1() {
-		return phone1;
+	public String getPhone() {
+		return phone;
 	}
-	public void setPhone1(String phone1) {
-		this.phone1 = phone1;
-	}
-	public String getPhone2() {
-		return phone2;
-	}
-	public void setPhone2(String phone2) {
-		this.phone2 = phone2;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public Date getDateOfIssue() {
 		return dateOfIssue;

@@ -26,15 +26,8 @@ public class PatientRepository {
 	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		String sqlTemplate = 
 				"select *\r\n" + 
-				"  from (select rownum rn,\r\n" + 
-				"               patient_id,\r\n" + 
-				"               name,\r\n" + 
-				"               sex_code,\r\n" + 
-				"               date_of_birth,\r\n" + 
-				"               phone_number1,\r\n" + 
-				"               phone_number2,\r\n" + 
-				"               create_time\r\n" + 
-				"          from pca.pca_patient_info\r\n" + 
+				"  from (select rownum rn, t.*\r\n" +
+				"          from pca.pca_patient_info t\r\n" + 
 				"         where $where),\r\n" +
 				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
 				"         where $where)\r\n" +
@@ -58,14 +51,22 @@ public class PatientRepository {
 		AtomicInteger total = new AtomicInteger(-1);
 		List<PatientCard> patients = jdbc.query(
                 sql, new Object[] {},
-                (rs, rowNum) -> {             
+                (rs, rowNum) -> {
+                	
+                	String phone1 = rs.getString("phone_number1");
+                	String phone2 = rs.getString("phone_number2");
+                	String phone = 
+                			phone1 == null ? 
+                			(phone2 == null ? null : phone2) : 
+                			(phone2 == null ? phone1 : (phone1.equals(phone2) ? phone1 : phone1 + " 或 " + phone2)); 
+                	
                 	PatientCard patient = new PatientCard(                
                 		rs.getString("patient_id"), 
                 		rs.getString("name"),
                 		rs.getString("sex_code"),
+                		rs.getString("id_number"),
                 		rs.getDate("date_of_birth"),
-                		rs.getString("phone_number1"),
-                		rs.getString("phone_number2"),
+                		phone,
                 		rs.getDate("create_time"));
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); 
                 	}                	
