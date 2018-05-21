@@ -26,9 +26,19 @@ public class PatientRepository {
 	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		String sqlTemplate = 
 				"select *\r\n" + 
-				"  from (select rownum rn, t.*\r\n" +
-				"          from pca.pca_patient_info t\r\n" + 
-				"         where $where),\r\n" +
+				"  from (select rownum rn, t.*\r\n" + 
+				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept\r\n" + 
+				"          from pca.pca_patient_info tt1,\r\n" + 
+				"               pts.pai_visit tt2,\r\n" + 
+				"               (select t1.patient_id,\r\n" + 
+				"                       max(t2.in_register_date) as max_in_reg_date\r\n" + 
+				"                  from pca.pca_patient_info t1, pts.pai_visit t2\r\n" + 
+				"                 where t1.patient_id = t2.patient_id\r\n" + 
+				"                 group by t1.patient_id) tt3\r\n" + 
+				"         where tt1.patient_id = tt2.patient_id\r\n" + 
+				"           and tt1.patient_id = tt3.patient_id\r\n" + 
+				"           and tt2.in_register_date = tt3.max_in_reg_date) t\r\n" + 
+				"           where $where),\r\n" +
 				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
 				"         where $where)\r\n" +
 				" where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
@@ -64,6 +74,8 @@ public class PatientRepository {
                 		rs.getString("patient_id"), 
                 		rs.getString("name"),
                 		rs.getString("sex_code"),
+                		rs.getString("current_status"),
+                		rs.getString("current_dept"),
                 		rs.getString("id_number"),
                 		rs.getDate("date_of_birth"),
                 		phone,

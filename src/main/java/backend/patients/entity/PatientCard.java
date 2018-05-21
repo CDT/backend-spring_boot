@@ -16,12 +16,16 @@ public class PatientCard {
 		columnMapper.put("phone2", "phone_number");
 		columnMapper.put("dateOfIssue", "create_time");
 		columnMapper.put("isCancelled", "is_cancel");
+		columnMapper.put("currentStatus", "current_status");
+		columnMapper.put("currentDept", "current_dept");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue) {
+	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentDept, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
+		this.currentStatus = currentStatus;
+		this.currentDept = currentDept;
 		this.idNumber = idNumber;
 		this.dateOfBirth = dateOfBirth;
 		this.phone = phone;
@@ -31,6 +35,8 @@ public class PatientCard {
 	private String patientId;
 	private String name;
 	private String gender;
+	private String currentStatus;
+	private String currentDept;
 	private String idNumber;
 	private Date dateOfBirth;
 	private String phone;
@@ -80,6 +86,18 @@ public class PatientCard {
 	}
 	public Date getDateOfIssue() {
 		return dateOfIssue;
+	}
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+	public String getCurrentDept() {
+		return currentDept;
+	}
+	public void setCurrentDept(String currentDept) {
+		this.currentDept = currentDept;
 	}
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
