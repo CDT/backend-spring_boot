@@ -4,7 +4,14 @@ public class InpatientVisit {
 	
 	private String visitId;
 	private String currentPaymentMethod;
+	private String bloodType;
 	
+	public String getBloodType() {
+		return bloodType;
+	}
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}
 	public String getVisitId() {
 		return visitId;
 	}

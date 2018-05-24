@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import backend.common.QueryResult;
+import backend.patients.entity.Address;
 import backend.patients.entity.PatientCard;
 
 @Repository
@@ -27,7 +28,8 @@ public class PatientRepository {
 		String sqlTemplate = 
 				"select *\r\n" + 
 				"  from (select rownum rn, t.*\r\n" + 
-				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept\r\n" + 
+				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept\r\n" +
+				"  		   tt2.bloodtype\r\n" +
 				"          from pca.pca_patient_info tt1,\r\n" + 
 				"               pts.pai_visit tt2,\r\n" + 
 				"               (select t1.patient_id,\r\n" + 
@@ -79,7 +81,15 @@ public class PatientRepository {
                 		rs.getString("id_number"),
                 		rs.getDate("date_of_birth"),
                 		phone,
-                		rs.getDate("create_time"));
+                		rs.getDate("create_time"), 
+                		new Address(
+                			rs.getString("citizenship_code"), 
+                			rs.getString("home_addr_province_code"),
+                			rs.getString("home_addr_city_code"),
+                			rs.getString("home_addr_county_code"),
+                			rs.getString("home_addr_street"), 
+                			rs.getString("next_of_kin_addr")
+                		));
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); 
                 	}                	
                 	return patient;

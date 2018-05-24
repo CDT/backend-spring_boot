@@ -17,30 +17,32 @@ public class PatientCard {
 		columnMapper.put("dateOfIssue", "create_time");
 		columnMapper.put("isCancelled", "is_cancel");
 		columnMapper.put("currentStatus", "current_status");
-		columnMapper.put("currentDept", "current_dept");
+		columnMapper.put("currentWard", "current_ward");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentDept, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue) {
+	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, Address address) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
 		this.currentStatus = currentStatus;
-		this.currentDept = currentDept;
+		this.currentWard = currentWard;
 		this.idNumber = idNumber;
 		this.dateOfBirth = dateOfBirth;
 		this.phone = phone;
 		this.dateOfIssue = dateOfIssue;
+		this.address = address;
 	}
 	
 	private String patientId;
 	private String name;
 	private String gender;
 	private String currentStatus;
-	private String currentDept;
+	private String currentWard;
 	private String idNumber;
 	private Date dateOfBirth;
 	private String phone;
 	private Date dateOfIssue;
+	private Address address;
 
 	public String getGender() {
 		return gender;
@@ -93,13 +95,19 @@ public class PatientCard {
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
 	}
-	public String getCurrentDept() {
-		return currentDept;
+	public String getCurrentWard() {
+		return currentWard;
 	}
-	public void setCurrentDept(String currentDept) {
-		this.currentDept = currentDept;
+	public void setCurrentWard(String currentWard) {
+		this.currentWard = currentWard;
 	}
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 }
