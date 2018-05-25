@@ -42,7 +42,7 @@ public class PatientController {
     	int total = queryResult.getTotal();
     	
     	//employees.forEach(customer -> log.info(customer.toString()));
-    	log.info("query finished, returned " + patients.size() + " of total " + total + "records.");
+    	log.info("query finished, returned " + patients.size() + " of total " + total + " records.");
     	
         return ResponseForTable.buildResponse(patients, request.getRequestURI(), page, perPage, total);
     }

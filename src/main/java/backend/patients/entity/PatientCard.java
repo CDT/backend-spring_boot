@@ -20,7 +20,7 @@ public class PatientCard {
 		columnMapper.put("currentWard", "current_ward");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, Address address) {
+	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, String bloodType, Address address) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
@@ -30,6 +30,7 @@ public class PatientCard {
 		this.dateOfBirth = dateOfBirth;
 		this.phone = phone;
 		this.dateOfIssue = dateOfIssue;
+		this.bloodType = bloodType;
 		this.address = address;
 	}
 	
@@ -42,8 +43,15 @@ public class PatientCard {
 	private Date dateOfBirth;
 	private String phone;
 	private Date dateOfIssue;
+	private String bloodType;
 	private Address address;
 
+	public String getBloodType() {
+		return bloodType;
+	}
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}
 	public String getGender() {
 		return gender;
 	}

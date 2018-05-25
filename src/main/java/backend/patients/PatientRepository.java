@@ -28,7 +28,7 @@ public class PatientRepository {
 		String sqlTemplate = 
 				"select *\r\n" + 
 				"  from (select rownum rn, t.*\r\n" + 
-				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept\r\n" +
+				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept,\r\n" +
 				"  		   tt2.bloodtype\r\n" +
 				"          from pca.pca_patient_info tt1,\r\n" + 
 				"               pts.pai_visit tt2,\r\n" + 
@@ -82,6 +82,7 @@ public class PatientRepository {
                 		rs.getDate("date_of_birth"),
                 		phone,
                 		rs.getDate("create_time"), 
+                		rs.getString("bloodtype"),
                 		new Address(
                 			rs.getString("citizenship_code"), 
                 			rs.getString("home_addr_province_code"),
