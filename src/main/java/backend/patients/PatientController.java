@@ -47,4 +47,19 @@ public class PatientController {
         return ResponseForTable.buildResponse(patients, request.getRequestURI(), page, perPage, total);
     }
     
+    @RequestMapping("/cardTrack")
+    public String cardTrack(
+    		@RequestParam(name="id", required=false) String ID,
+    		HttpServletRequest request
+    		) {
+    	log.info("request from: " + request.getRequestURI());
+    	log.info("called /cardTrack, querying...");
+    	
+    	String cardTrack = patientService.getCardTrack(ID);
+    	
+    	log.info("query finished, returned cardTrack " + cardTrack);
+    	return cardTrack;
+   
+    }
+    
 }

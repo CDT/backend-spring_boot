@@ -17,4 +17,8 @@ public class PatientService {
 	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		return patientRepository.getPatients(ID, name, isFuzzy, page, per_page, filter, sort);
 	}
+	
+	public String getCardTrack(String ID) {
+		return patientRepository.getCardTrack(ID);
+	}
 }

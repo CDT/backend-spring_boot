@@ -100,4 +100,21 @@ public class PatientRepository {
 		return new QueryResult(total.get(), patients);
 	}
 	
+	public String getCardTrack(String ID) {
+		String sql = "select '%E?;' || track_data || '?+E?' as cardTrack\r\n" + 
+				"  from pca.pca_patient_service_card_info t\r\n" + 
+				" where t.card_no = '" + ID + "'";
+		
+		log.info("Ready to execute: \n" + sql);		
+		
+		List<String> cardTracks = jdbc.query(
+                sql, new Object[] {},
+                (rs, rowNum) -> {              	
+                	return rs.getString("cardTrack");
+                }
+          	);
+		
+		return cardTracks.isEmpty() ? null : cardTracks.get(0);
+	}
+	
 }

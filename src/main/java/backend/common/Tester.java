@@ -2,6 +2,10 @@ package backend.common;
 
 public class Tester {
 	
+	public Tester() {
+		System.out.println("Tester");
+	}
+	
 	public static void main(String[] args) {
 	    Dog aDog = new Dog("Max");
 	    // we pass the object to foo
