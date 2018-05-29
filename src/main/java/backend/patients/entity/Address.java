@@ -2,6 +2,8 @@ package backend.patients.entity;
 
 import java.util.HashMap;
 
+// 暂不使用
+
 public class Address {
 	
 	public static HashMap<String, String> columnMapper =  new HashMap<String, String>();

@@ -39,7 +39,7 @@ public class TranslationRepository {
 		if(conditionString.toString().endsWith("or ")) {
 			conditionString.setLength(conditionString.length() - 3);
 		}
-		sql = sql.replaceAll("\\$conditions", conditionString.equals("") ? "1=1" : conditionString.toString());
+		sql = sql.replaceAll("\\$conditions", conditionString.toString().equals("") ? "1=1" : conditionString.toString());
 		
 		log.info("Ready to execute: \n" + sql);		
 		

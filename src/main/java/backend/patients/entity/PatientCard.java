@@ -18,9 +18,10 @@ public class PatientCard {
 		columnMapper.put("isCancelled", "is_cancel");
 		columnMapper.put("currentStatus", "current_status");
 		columnMapper.put("currentWard", "current_ward");
+		columnMapper.put("contact_address",  "address");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, String bloodType, Address address) {
+	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, String bloodType, String address) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
@@ -44,7 +45,8 @@ public class PatientCard {
 	private String phone;
 	private Date dateOfIssue;
 	private String bloodType;
-	private Address address;
+	//private Address address;
+	private String address;
 
 	public String getBloodType() {
 		return bloodType;
@@ -112,10 +114,17 @@ public class PatientCard {
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
 	}
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+//	public Address getAddress() {
+//		return address;
+//	}
+//	public void setAddress(Address address) {
+//		this.address = address;
+//	}
 }

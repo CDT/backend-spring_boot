@@ -28,18 +28,16 @@ public class PatientRepository {
 		String sqlTemplate = 
 				"select *\r\n" + 
 				"  from (select rownum rn, t.*\r\n" + 
-				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept,\r\n" +
+				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept, tt2.contact_address,\r\n" +
 				"  		   tt2.bloodtype\r\n" +
-				"          from pca.pca_patient_info tt1,\r\n" + 
-				"               pts.pai_visit tt2,\r\n" + 
+				"          from pca.pca_patient_info tt1 left join\r\n" + 
+				"               pts.pai_visit tt2 on tt1.patient_id = tt2.patient_id, \r\n" + 
 				"               (select t1.patient_id,\r\n" + 
 				"                       max(t2.in_register_date) as max_in_reg_date\r\n" + 
-				"                  from pca.pca_patient_info t1, pts.pai_visit t2\r\n" + 
-				"                 where t1.patient_id = t2.patient_id\r\n" + 
+				"                  from pca.pca_patient_info t1 left join pts.pai_visit t2\r\n" + 
+				"                 on t1.patient_id = t2.patient_id\r\n" + 
 				"                 group by t1.patient_id) tt3\r\n" + 
-				"         where tt1.patient_id = tt2.patient_id\r\n" + 
-				"           and tt1.patient_id = tt3.patient_id\r\n" + 
-				"           and tt2.in_register_date = tt3.max_in_reg_date) t\r\n" + 
+				"           where tt2.in_register_date = tt3.max_in_reg_date) t\r\n" + 
 				"           where $where),\r\n" +
 				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
 				"         where $where)\r\n" +
@@ -83,14 +81,8 @@ public class PatientRepository {
                 		phone,
                 		rs.getDate("create_time"), 
                 		rs.getString("bloodtype"),
-                		new Address(
-                			rs.getString("citizenship_code"), 
-                			rs.getString("home_addr_province_code"),
-                			rs.getString("home_addr_city_code"),
-                			rs.getString("home_addr_county_code"),
-                			rs.getString("home_addr_street"), 
-                			rs.getString("next_of_kin_addr")
-                		));
+                		rs.getString("contact_address")
+                	);
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); 
                 	}                	
                 	return patient;
