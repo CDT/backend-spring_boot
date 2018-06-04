@@ -16,23 +16,16 @@ public class PatientCard {
 		columnMapper.put("phone2", "phone_number");
 		columnMapper.put("dateOfIssue", "create_time");
 		columnMapper.put("isCancelled", "is_cancel");
-		columnMapper.put("currentStatus", "current_status");
-		columnMapper.put("currentWard", "current_ward");
-		columnMapper.put("contact_address",  "address");
 	}
 	
-	public PatientCard(String patientId, String name, String gender, String currentStatus, String currentWard, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue, String bloodType, String address) {
+	public PatientCard(String patientId, String name, String gender, String idNumber, Date dateOfBirth, String phone, Date dateOfIssue) {
 		this.patientId = patientId;
 		this.name = name;
 		this.gender = gender;
-		this.currentStatus = currentStatus;
-		this.currentWard = currentWard;
 		this.idNumber = idNumber;
 		this.dateOfBirth = dateOfBirth;
 		this.phone = phone;
 		this.dateOfIssue = dateOfIssue;
-		this.bloodType = bloodType;
-		this.address = address;
 	}
 	
 	private String patientId;
@@ -44,16 +37,9 @@ public class PatientCard {
 	private Date dateOfBirth;
 	private String phone;
 	private Date dateOfIssue;
-	private String bloodType;
 	//private Address address;
 	private String address;
 
-	public String getBloodType() {
-		return bloodType;
-	}
-	public void setBloodType(String bloodType) {
-		this.bloodType = bloodType;
-	}
 	public String getGender() {
 		return gender;
 	}
@@ -99,26 +85,8 @@ public class PatientCard {
 	public Date getDateOfIssue() {
 		return dateOfIssue;
 	}
-	public String getCurrentStatus() {
-		return currentStatus;
-	}
-	public void setCurrentStatus(String currentStatus) {
-		this.currentStatus = currentStatus;
-	}
-	public String getCurrentWard() {
-		return currentWard;
-	}
-	public void setCurrentWard(String currentWard) {
-		this.currentWard = currentWard;
-	}
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
 	}
 	
 //	public Address getAddress() {

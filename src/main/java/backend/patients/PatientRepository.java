@@ -26,30 +26,34 @@ public class PatientRepository {
 	 */
 	public QueryResult getPatients(String ID, String name, boolean isFuzzy, int page, int per_page, String filter, String sort) {
 		String sqlTemplate = 
-				"select *\r\n" + 
-				"  from (select rownum rn, t.*\r\n" + 
-				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept, tt2.contact_address,\r\n" +
-				"  		   tt2.bloodtype\r\n" +
-				"          from pca.pca_patient_info tt1 left join\r\n" + 
-				"               pts.pai_visit tt2 on tt1.patient_id = tt2.patient_id, \r\n" + 
-				"               (select t1.patient_id,\r\n" + 
-				"                       max(t2.in_register_date) as max_in_reg_date\r\n" + 
-				"                  from pca.pca_patient_info t1 left join pts.pai_visit t2\r\n" + 
-				"                 on t1.patient_id = t2.patient_id\r\n" + 
-				"                 group by t1.patient_id) tt3\r\n" + 
-				"           where tt2.in_register_date = tt3.max_in_reg_date) t\r\n" + 
-				"           where $where),\r\n" +
-				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
-				"         where $where)\r\n" +
-				" where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
+				"select * from (select rownum rn, t.* from pca.pca_patient_info t $where), \r\n" + 
+				"(select count(*) as total_num_rows from  pca.pca_patient_info $where)\r\n" +
+				"where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
+//				"where rn BETWEEN ($pagenumber - 1) * $pagesize and $pagenumber * $pagesize"
+//				"select *\r\n" + 
+//				"  from (select rownum rn, t.*\r\n" + 
+//				"  from (select tt1.*, tt2.in_register_date, tt2.current_status, tt2.current_dept, tt2.contact_address,\r\n" +
+//				"  		   tt2.bloodtype\r\n" +
+//				"          from pca.pca_patient_info tt1 left join\r\n" + 
+//				"               pts.pai_visit tt2 on tt1.patient_id = tt2.patient_id, \r\n" + 
+//				"               (select t1.patient_id,\r\n" + 
+//				"                       max(t2.in_register_date) as max_in_reg_date\r\n" + 
+//				"                  from pca.pca_patient_info t1 left join pts.pai_visit t2\r\n" + 
+//				"                 on t1.patient_id = t2.patient_id\r\n" + 
+//				"                 group by t1.patient_id) tt3\r\n" + 
+//				"           where tt2.in_register_date = tt3.max_in_reg_date) t\r\n" + 
+//				"           where $where),\r\n" +
+//				"		 (select count(*) as total_num_rows from pca.pca_patient_info\r\n" +
+//				"         where $where)\r\n" +
+//				" where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
 		
 		if(filter != null && filter.length() > 0) {
 			sqlTemplate = sqlTemplate.replaceAll("\\$where", 
-					"(name like '%\\$filter%' or id_number like '%\\$filter%' or \r\n" + 
+					"where name like '%\\$filter%' or id_number like '%\\$filter%' or \r\n" + 
 					"patient_id like '%\\$filter%' or\r\n" + 
-					"phone_number1 like '%\\$filter%' or phone_number2 like '%\\$filter%')");
+					"phone_number1 like '%\\$filter%' or phone_number2 like '%\\$filter%'");
 		} else {
-			sqlTemplate = sqlTemplate.replaceAll("\\$where", "1=1");
+			sqlTemplate = sqlTemplate.replaceAll("\\$where", "");
 		}
 		
 		String sql = sqlTemplate.replaceAll("\\$pagenumber", Integer.toString(page))
@@ -74,14 +78,10 @@ public class PatientRepository {
                 		rs.getString("patient_id"), 
                 		rs.getString("name"),
                 		rs.getString("sex_code"),
-                		rs.getString("current_status"),
-                		rs.getString("current_dept"),
                 		rs.getString("id_number"),
                 		rs.getDate("date_of_birth"),
                 		phone,
-                		rs.getDate("create_time"), 
-                		rs.getString("bloodtype"),
-                		rs.getString("contact_address")
+                		rs.getDate("create_time")
                 	);
                 	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); 
                 	}                	

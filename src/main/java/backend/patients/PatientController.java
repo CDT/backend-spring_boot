@@ -61,5 +61,22 @@ public class PatientController {
     	return cardTrack;
    
     }
+
+    @RequestMapping("/visit")
+    public String visit(
+    		@RequestParam(name="type", required=false) String type,
+    		@RequestParam(name="numberOfVisit", required=false) int numberOfVisit,
+    		HttpServletRequest request
+    		) {
+    	log.info("request from: " + request.getRequestURI());
+    	log.info("called /visit, querying...");
+    	
+    	// String cardTrack = patientService.getCardTrack(type);
+    	String cardTrack = "abc";
+    	
+    	log.info("query finished, returned cardTrack " + cardTrack);
+    	return cardTrack;
+   
+    }
     
 }
