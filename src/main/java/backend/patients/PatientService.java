@@ -21,4 +21,8 @@ public class PatientService {
 	public String getCardTrack(String ID) {
 		return patientRepository.getCardTrack(ID);
 	}
+	
+	public List<? extends Object> getVisit(String ID, String type, int numberOfVisit) {
+		return patientRepository.getVisit(ID, type, numberOfVisit);
+	}
 }

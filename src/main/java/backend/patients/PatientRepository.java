@@ -109,4 +109,21 @@ public class PatientRepository {
 		return cardTracks.isEmpty() ? null : cardTracks.get(0);
 	}
 	
+	public List<? extends Object> getVisit(String ID, String type, int numberOfVisit) {
+		String sql = "select '%E?;' || track_data || '?+E?' as cardTrack\r\n" + 
+				"  from pca.pca_patient_service_card_info t\r\n" + 
+				" where t.card_no = '" + ID + "'";
+		
+		log.info("Ready to execute: \n" + sql);		
+		
+		List<String> cardTracks = jdbc.query(
+                sql, new Object[] {},
+                (rs, rowNum) -> {              	
+                	return rs.getString("cardTrack");
+                }
+          	);
+		
+		return null;
+	}
+	
 }
