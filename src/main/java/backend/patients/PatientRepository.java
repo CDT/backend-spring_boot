@@ -109,21 +109,36 @@ public class PatientRepository {
 		return cardTracks.isEmpty() ? null : cardTracks.get(0);
 	}
 	
-	public List<? extends Object> getVisit(String ID, String type, int numberOfVisit) {
-		String sql = "select '%E?;' || track_data || '?+E?' as cardTrack\r\n" + 
-				"  from pca.pca_patient_service_card_info t\r\n" + 
-				" where t.card_no = '" + ID + "'";
+	public List<? extends Object> getVisit(String ID, String type, int start, int end) {
+		StringBuilder sql = new StringBuilder();
+		if (type.equals("inpatient")) {
+			sql.append("select * from pts.pai_visit t where t.patient_id = '" + ID + "'");
+			if(start == -1) {
+				sql.append(" and t.visit_id = "
+						+ "(select max(visit_id) from pts.pai_visit t\r\n" 
+						+ " where t.patient_id = '" + ID + "')");
+			} else {
+				sql.append(" and t.visit_id >= " + start  
+						+ ( end == -1 ? "" : " and t.visit_id <= " + end));
+			}					
+		} else if (type.equals("outpatient")) {
+			// TODO
+		}
 		
 		log.info("Ready to execute: \n" + sql);		
 		
-		List<String> cardTracks = jdbc.query(
+		List<? extends Object> visits = jdbc.query(
                 sql, new Object[] {},
-                (rs, rowNum) -> {              	
-                	return rs.getString("cardTrack");
+                (rs, rowNum) -> {
+                	if (type == "inpatient") {
+                		return new InpatientVisit(); 
+                	} else {
+                		return null;
+                	}
                 }
           	);
 		
-		return null;
+		return visits;
 	}
 	
 }

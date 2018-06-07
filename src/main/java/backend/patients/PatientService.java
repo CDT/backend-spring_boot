@@ -22,7 +22,17 @@ public class PatientService {
 		return patientRepository.getCardTrack(ID);
 	}
 	
-	public List<? extends Object> getVisit(String ID, String type, int numberOfVisit) {
-		return patientRepository.getVisit(ID, type, numberOfVisit);
+	public List<? extends Object> getVisit(String ID, String type, String range) {
+		int start = 1;
+		int end = -1;
+		if (range.equals("newest")) {
+			start = -1;
+		} else if (range == null || range.equals("all") || range.equals("")) { // 默认情况
+			// 保持默认值；
+		} else {
+			start = Integer.valueOf(range.split("-")[0]);
+			end = range.contains("-") ? Integer.valueOf(range.split("-")[1]) : start;
+		}
+		return patientRepository.getVisit(ID, type, start, end);
 	}
 }

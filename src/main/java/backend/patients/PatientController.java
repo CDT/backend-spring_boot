@@ -15,7 +15,6 @@ import backend.common.QueryResult;
 import backend.common.ResponseForTable;
 import backend.patients.entity.InpatientVisit;
 import backend.patients.entity.PatientCard;
-import backend.patients.entity.Visits;
 
 @RestController
 public class PatientController {
@@ -65,19 +64,19 @@ public class PatientController {
     }
 
     @RequestMapping("/visit")
-    public Visits visit(
+    public List<? extends Object> visit(
     		@RequestParam(name="id", required=true) String ID,
     		@RequestParam(name="type", required=true) String type,
-    		@RequestParam(name="numberOfVisit", required=false) int numberOfVisit,
+    		@RequestParam(name="range", required=false) String range,
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());
     	log.info("called /visit, querying...");
     	
-    	List<? extends Object> visits = patientService.getVisit(ID, type, numberOfVisit);
+    	List<? extends Object> visits = patientService.getVisit(ID, type.toLowerCase(), range);
     	    	
     	log.info("query finished, returned " + visits.size() + " records");
-    	return new Visits(id, type, numberOfVisit, visits);
+    	return visits;
    
     }
     
