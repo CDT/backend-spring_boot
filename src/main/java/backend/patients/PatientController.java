@@ -67,7 +67,7 @@ public class PatientController {
     public List<? extends Object> visit(
     		@RequestParam(name="id", required=true) String ID,
     		@RequestParam(name="type", required=true) String type,
-    		@RequestParam(name="range", required=false) String range,
+    		@RequestParam(name="range", required=true) String range,
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());

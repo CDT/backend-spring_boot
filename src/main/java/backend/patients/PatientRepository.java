@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import backend.common.QueryResult;
 import backend.patients.entity.Address;
+import backend.patients.entity.InpatientVisit;
 import backend.patients.entity.PatientCard;
 
 @Repository
@@ -128,16 +129,22 @@ public class PatientRepository {
 		log.info("Ready to execute: \n" + sql);		
 		
 		List<? extends Object> visits = jdbc.query(
-                sql, new Object[] {},
-                (rs, rowNum) -> {
-                	if (type == "inpatient") {
-                		return new InpatientVisit(); 
+                sql.toString(), new Object[] {},
+                (rs, rowNum) -> {              	
+                	if (type.equals("inpatient")) {
+                		return new InpatientVisit(
+                				rs.getString("patient_id"),
+                				rs.getString("visit_id"),
+                				rs.getString("pai_visit_id"),
+                				rs.getString("cost_type"),
+                				rs.getString("current_dept"),
+                				rs.getString("current_ward")
+                			);
                 	} else {
                 		return null;
                 	}
                 }
           	);
-		
 		return visits;
 	}
 	

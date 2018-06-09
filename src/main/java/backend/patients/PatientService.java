@@ -29,6 +29,8 @@ public class PatientService {
 			start = -1;
 		} else if (range == null || range.equals("all") || range.equals("")) { // 默认情况
 			// 保持默认值；
+		} else if (range.equals("-1")) {
+			start = end = -1;
 		} else {
 			start = Integer.valueOf(range.split("-")[0]);
 			end = range.contains("-") ? Integer.valueOf(range.split("-")[1]) : start;
