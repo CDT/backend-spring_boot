@@ -25,7 +25,7 @@ public class PatientService {
 	public List<? extends Object> getVisit(String ID, String type, String range) {
 		int start = 1;
 		int end = -1;
-		if (range.equals("newest")) {
+		if (range.equals("latest")) {
 			start = -1;
 		} else if (range == null || range.equals("all") || range.equals("")) { // 默认情况
 			// 保持默认值；

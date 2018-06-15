@@ -40,6 +40,24 @@ public class PatientCard {
 	//private Address address;
 	private String address;
 
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+	public String getCurrentWard() {
+		return currentWard;
+	}
+	public void setCurrentWard(String currentWard) {
+		this.currentWard = currentWard;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	public String getGender() {
 		return gender;
 	}
