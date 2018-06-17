@@ -136,6 +136,7 @@ public class PatientRepository {
                 				rs.getString("patient_id"),
                 				rs.getString("visit_id"),
                 				rs.getString("pai_visit_id"),
+                				rs.getString("current_status"),
                 				rs.getString("cost_type"),
                 				rs.getString("current_dept"),
                 				rs.getString("current_ward")

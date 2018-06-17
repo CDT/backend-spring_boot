@@ -6,19 +6,32 @@ public class InpatientVisit {
 	private String numberOfVisit;
 	private String visitId;
 	private String currentPaymentMethod;
+	private String currentStatus;
 	private String currentDept;
 	private String currentWard;
 	
-	public InpatientVisit(String patientId, String numberOfVisit, 
-			String visitId, String currentPaymentMethod, 
-			String currentDept, String currentWard) {
+	public InpatientVisit(
+			String patientId, String numberOfVisit, 
+			String visitId, String currentStatus, 
+			String currentPaymentMethod, String currentDept, 
+			String currentWard) {
 		this.patientId = patientId;
 		this.numberOfVisit = numberOfVisit;
 		this.visitId = visitId;
+		this.currentStatus = currentStatus;
+		this.currentPaymentMethod = currentPaymentMethod;
 		this.currentDept = currentDept;
 		this.currentWard = currentWard;
 	}
 	
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+
 	public String getPatientId() {
 		return patientId;
 	}

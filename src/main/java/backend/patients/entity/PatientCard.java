@@ -31,8 +31,8 @@ public class PatientCard {
 	private String patientId;
 	private String name;
 	private String gender;
+	// 占位字段，一般值为空
 	private String currentStatus;
-	private String currentWard;
 	private String idNumber;
 	private Date dateOfBirth;
 	private String phone;
@@ -88,6 +88,19 @@ public class PatientCard {
 	public void setDateOfIssue(Date dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
 	}
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	
 //	public Address getAddress() {
 //		return address;
