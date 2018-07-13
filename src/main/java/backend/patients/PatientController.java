@@ -1,5 +1,6 @@
 package backend.patients;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,17 +64,30 @@ public class PatientController {
    
     }
 
-    @RequestMapping("/visit")
-    public List<? extends Object> visit(
-    		@RequestParam(name="id", required=true) String ID,
-    		@RequestParam(name="type", required=true) String type,
+    @RequestMapping("/visits")
+    public List<? extends Object> visits(
+    		// org不为空，id为空时，表示查询某个科室的所有就诊记录
+    		@RequestParam(name="org", required=false) String org,
+    		@RequestParam(name="id", required=false) String ID,   
+    		/* 当org为空时，type分为门诊、住院、全部；
+    		 * 当org不为空时，type分为门诊、当前在科、已转他科、他科转入、本科出院、本科邀请会诊、本科参与会诊 */
+    		@RequestParam(name="type", required=false) String type, 
+    		@RequestParam(name="status", required=false) String status, // 患者在院状态PTS0015
+    		// 次数范围，如“1-3”表示第1到3次就诊记录
     		@RequestParam(name="range", required=false) String range,
+    		// 入院、出院时间范围
+    		@RequestParam(name="admissionDateStart", required=false) Date admissionDateStart,
+    		@RequestParam(name="admissionDateEnd", required=false) Date admissionDateEnd,
+    		@RequestParam(name="dischargeDateStart", required=false) Date dischargeDateStart,
+    		@RequestParam(name="dischargeDateEnd", required=false) Date dischargeDateEnd,
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());
     	log.info("called /visit, querying...");
     	
-    	List<? extends Object> visits = patientService.getVisit(ID, type.toLowerCase(), range);
+    	List<? extends Object> visits = 
+    			patientService.getVisits(org, ID, type.toLowerCase(), range, 
+    					admissionDateStart, admissionDateEnd, dischargeDateStart, dischargeDateEnd);
     	    	
     	log.info("query finished, returned " + visits.size() + " records");
     	return visits;

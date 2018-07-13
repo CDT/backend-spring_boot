@@ -1,5 +1,6 @@
 package backend.patients;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,31 @@ public class PatientService {
 		return patientRepository.getCardTrack(ID);
 	}
 	
-	public List<? extends Object> getVisit(String ID, String type, String range) {
-		int start = 1;
-		int end = -1;
-		if (range.equals("latest")) {
-			start = -1;
-		} else if (range == null || range.equals("all") || range.equals("")) { // 默认情况
-			// 保持默认值；
+	public List<? extends Object> getVisits(
+			String org, String ID, String type, String range,
+			Date admissionDateStart, Date admissionDateEnd, Date dischargeDateStart, Date dischargeDateEnd) {
+		
+		if( org == null || org.length() == 0) {
+		// 1. 查询单患者的就诊记录
+		// 解析range，start表示起始次数，end表示结束次数：
+			int start = 1;
+			int end = -1;
+			if (range.equals("latest")) {
+				start = -1;
+			} else if (range == null || range.equals("all") || range.equals("")) { // 默认情况
+				// 保持默认值；
+			} else {
+				start = Integer.valueOf(range.split("-")[0]);
+				end = range.contains("-") ? Integer.valueOf(range.split("-")[1]) : start;
+			}
+			return patientRepository.getVisits(ID, type, start, end);
+		} else if( ID == null || ID.length() == 0 ) {
+		// 2. 查询科室所有患者的就诊记录
+			return patientRepository.getVisits(org, type, 
+					admissionDateStart, admissionDateEnd, dischargeDateStart, dischargeDateEnd);
 		} else {
-			start = Integer.valueOf(range.split("-")[0]);
-			end = range.contains("-") ? Integer.valueOf(range.split("-")[1]) : start;
+		// 3. 其他情况，TODO
+			return null;
 		}
-		return patientRepository.getVisit(ID, type, start, end);
 	}
 }

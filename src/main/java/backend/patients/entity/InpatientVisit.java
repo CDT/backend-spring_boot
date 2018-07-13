@@ -3,17 +3,23 @@ package backend.patients.entity;
 public class InpatientVisit {
 	
 	private String patientId;
-	private String numberOfVisit;
-	private String visitId;
+	private Long numberOfVisit;
+	private Long visitId;
+	private String bedNumber;
+	private Long medicalTeamId;
 	private String currentPaymentMethod;
 	private String currentDept;
 	private String currentWard;
 	private String currentStatus;
 	
-	public InpatientVisit(String patientId, String numberOfVisit, String visitId, String currentPaymentMethod, String currentDept, String currentWard, String currentStatus) {
+	public InpatientVisit(String patientId, Long numberOfVisit, Long visitId, 
+			String bedNumber, Long medicalTeamId, 
+			String currentPaymentMethod, String currentDept, String currentWard, String currentStatus) {
 		this.patientId = patientId;
 		this.numberOfVisit = numberOfVisit;
 		this.visitId = visitId;
+		this.bedNumber = bedNumber;
+		this.medicalTeamId = medicalTeamId;
 		this.currentPaymentMethod = currentPaymentMethod;
 		this.currentDept = currentDept;
 		this.currentWard = currentWard;
@@ -33,16 +39,33 @@ public class InpatientVisit {
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
-	public String getNumberOfVisit() {
+
+	public String getBedNumber() {
+		return bedNumber;
+	}
+
+	public void setBedNumber(String bedNumber) {
+		this.bedNumber = bedNumber;
+	}
+
+	public Long getMedicalTeamId() {
+		return medicalTeamId;
+	}
+
+	public void setMedicalTeamId(Long medicalTeamId) {
+		this.medicalTeamId = medicalTeamId;
+	}
+
+	public Long getNumberOfVisit() {
 		return numberOfVisit;
 	}
-	public void setNumberOfVisit(String numberOfVisit) {
+	public void setNumberOfVisit(Long numberOfVisit) {
 		this.numberOfVisit = numberOfVisit;
 	}
-	public String getVisitId() {
+	public Long getVisitId() {
 		return visitId;
 	}
-	public void setVisitId(String visitId) {
+	public void setVisitId(Long visitId) {
 		this.visitId = visitId;
 	}
 	public String getCurrentPaymentMethod() {

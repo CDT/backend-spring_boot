@@ -1,5 +1,6 @@
 package backend.patients;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -93,6 +94,70 @@ public class PatientRepository {
 		return new QueryResult(total.get(), patients);
 	}
 	
+	public QueryResult getVisitsByOrg(
+			String patientType,            // 患者类型：1.本科室患者 2.转出患者 3.转入患者 4.会诊患者 5.跨科协作患者，必填 
+			String org,                    // 科室代码，必填
+			String patientStatus,          // 患者状态，PTS0015，必填
+			String medicalTeamId,          // 诊疗小组ID
+			String doctorID,               // 医生工号，该患者对应诊疗小组中的三级医生
+			Date dateOfAdmissionStart,     // 入院日期，起始值
+			Date dateOfAdmissionEnd,       // 入院日期，结束值
+			Date dateOfDischargeStart,     // 出院日期，起始值
+			Date dateOfDischargeEnd,	   // 出院日期，结束值
+			int page, int per_page, String filter, String sort // 分页、搜索、排序等参数
+			) {
+		String sqlTemplate = 
+				"select * from (" +
+				"select * from pts.pai_visit t\r\n" + 
+				"$where " +
+				"and t.current_status = '" + patientStatus + "' \r\n" + 
+				"and (t.current_ward = '" + org + "' or t.current_dept = '" + org + "')\r\n" + 
+				"order by bed_code asc" +
+				"), \r\n" + 
+				"(select count(*) as total_num_rows from  pca.pca_patient_info $where)\r\n" +
+				"where rn BETWEEN ($pagenumber - 1) * $pagesize + 1 AND $pagenumber * $pagesize";
+		
+		if(filter != null && filter.length() > 0) {
+			sqlTemplate = sqlTemplate.replaceAll("\\$where", 
+					"where (patient_name like '%\\$filter%' or \r\n" +
+					"patient_id like '%\\$filter%' or \r\n" + 
+					"bed_code like '%\\$filter%')");
+		} else {
+			sqlTemplate = sqlTemplate.replaceAll("\\$where", "");
+		}
+		
+		String sql = sqlTemplate.replaceAll("\\$pagenumber", Integer.toString(page))
+				   				.replaceAll("\\$pagesize", Integer.toString(per_page))
+								.replaceAll("\\$filter", filter);
+		
+		log.info("Ready to execute: \n" + sql);		
+		
+		AtomicInteger total = new AtomicInteger(-1);
+		List<InpatientVisit> patients = jdbc.query(
+                sql, new Object[] {},
+                (rs, rowNum) -> {
+                	
+                	InpatientVisit inpVisit = new InpatientVisit(                
+            			rs.getString("patient_id"), 
+            			rs.getLong("visit_id"), 
+            			rs.getLong("pai_visit_id"),
+            			rs.getString("bed_code"),
+            			rs.getLong("team_id"),
+            			rs.getString("cost_type"), 
+            			rs.getString("current_dept"), 
+            			rs.getString("current_ward"),
+            			rs.getString("current_status")
+                	);
+                	if(total.get() == -1) { total.set(rs.getInt("total_num_rows")); 
+                	}                	
+                	return inpVisit;
+                }
+          	);
+		
+		return new QueryResult(total.get(), patients);
+	}
+	
+	
 	public String getCardTrack(String ID) {
 		String sql = "select '%E?;' || track_data || '?+E?' as cardTrack\r\n" + 
 				"  from pca.pca_patient_service_card_info t\r\n" + 
@@ -110,7 +175,7 @@ public class PatientRepository {
 		return cardTracks.isEmpty() ? null : cardTracks.get(0);
 	}
 	
-	public List<? extends Object> getVisit(String ID, String type, int start, int end) {
+	public List<? extends Object> getVisits(String ID, String type, int start, int end) {
 		StringBuilder sql = new StringBuilder();
 		if (type.equals("inpatient")) {
 			sql.append("select * from pts.pai_visit t where t.patient_id = '" + ID + "'");
@@ -134,8 +199,57 @@ public class PatientRepository {
                 	if (type.equals("inpatient")) {
                 		return new InpatientVisit(
                 				rs.getString("patient_id"), 
-                				rs.getString("visit_id"),
-                				rs.getString("pai_visit_id"),
+                				rs.getLong("visit_id"),
+                				rs.getLong("pai_visit_id"),
+                				rs.getString("bed_code"),
+                				rs.getLong("team_id"),
+                				rs.getString("cost_type"),
+                				rs.getString("current_dept"),
+                				rs.getString("current_ward"),
+                				rs.getString("current_status")
+                				); 
+                	} else {
+                		//TODO outpatient visit
+                		return null;
+                	}
+                }
+          	);
+		
+		return visits;
+	}
+	
+	public List<? extends Object> getVisits(String org, String type, 
+			Date admissionDateStart, Date admissionDateEnd, Date dischargeDateStart, Date dischargeDateEnd) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select * from pts.pai_visit t'");
+		if (type.equals("outpatient")) {
+			// TODO
+		} else if (type.equals("inpatient")) {
+			
+		} else if (type.equals("transferredOut")) {
+			// TODO
+		} else if (type.equals("transferredIn")) {
+			// TODO
+		} else if (type.equals("discharged")) {
+			// TODO
+		} else if (type.equals("consultationApplied")) {
+			// TODO
+		} else if (type.equals("consultationInvited")) {
+			// TODO
+		}
+		
+		log.info("Ready to execute: \n" + sql);		
+				
+		List<? extends Object> visits = jdbc.query(
+                sql.toString(), new Object[] {},
+                (rs, rowNum) -> {
+                	if (type.equals("inpatient")) {
+                		return new InpatientVisit(
+                				rs.getString("patient_id"), 
+                				rs.getLong("visit_id"),
+                				rs.getLong("pai_visit_id"),
+                				rs.getString("bed_code"),
+                				rs.getLong("team_id"),
                 				rs.getString("cost_type"),
                 				rs.getString("current_dept"),
                 				rs.getString("current_ward"),
