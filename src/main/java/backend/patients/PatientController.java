@@ -83,8 +83,8 @@ public class PatientController {
     		HttpServletRequest request
     		) {
     	log.info("request from: " + request.getRequestURI());
-    	log.info("called /visit, querying...");
-    	
+    	log.info("called /visits, querying...");
+    	// TODO: 参数监测，抛出异常
     	List<? extends Object> visits = 
     			patientService.getVisits(org, ID, type.toLowerCase(), range, 
     					admissionDateStart, admissionDateEnd, dischargeDateStart, dischargeDateEnd);

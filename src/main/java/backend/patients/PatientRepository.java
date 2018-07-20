@@ -220,12 +220,11 @@ public class PatientRepository {
 	
 	public List<? extends Object> getVisits(String org, String type, 
 			Date admissionDateStart, Date admissionDateEnd, Date dischargeDateStart, Date dischargeDateEnd) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * from pts.pai_visit t'");
+		StringBuilder sql = new StringBuilder("select * from pts.pai_visit t where 1=1");
 		if (type.equals("outpatient")) {
 			// TODO
-		} else if (type.equals("inpatient")) {
-			
+		} else if (type.equals("inpatient")) { // 在科
+			sql.append(" and t.current_status = '4'");
 		} else if (type.equals("transferredOut")) {
 			// TODO
 		} else if (type.equals("transferredIn")) {
@@ -237,6 +236,12 @@ public class PatientRepository {
 		} else if (type.equals("consultationInvited")) {
 			// TODO
 		}
+		
+		if(org != null && org.length() > 0) {
+			sql.append(" and (t.current_dept = '" + org + "' or t.current_ward = '" + org + "')");
+		}
+		
+		sql.append(" order by t.bed_code asc");
 		
 		log.info("Ready to execute: \n" + sql);		
 				
